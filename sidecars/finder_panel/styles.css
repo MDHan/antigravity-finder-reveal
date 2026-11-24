@@ -204,26 +204,81 @@ html, body {
   gap: 6px;
 }
 
-.group-header {
+.group-toggle {
+  width: 100%;
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 11.5px;
+  justify-content: space-between;
+  border: none;
+  background: transparent;
+  color: var(--fr-text);
+  padding: 2px 2px;
+  font-size: 12px;
   font-weight: 600;
-  color: var(--fr-subtext);
-  padding: 0 2px;
+  cursor: pointer;
 }
 
-.group-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  flex-shrink: 0;
+.group-toggle:hover {
+  color: var(--fr-accent);
+}
+
+.group-toggle[aria-expanded="true"] .collapse-arrow {
+  transform: rotate(90deg);
+}
+
+.group-title {
+  display: inline-flex;
+  align-items: center;
 }
 
 .group-count {
+  font-size: 11px;
   font-weight: 500;
-  color: var(--fr-subtle);
+  color: var(--fr-subtext);
+  background: var(--fr-surface);
+  border: 1px solid var(--fr-border);
+  border-radius: 999px;
+  padding: 0 7px;
+}
+
+.sub-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 1px 0 2px;
+}
+
+.sub-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid var(--fr-border);
+  background: var(--fr-surface);
+  color: var(--fr-subtext);
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.sub-pill:hover {
+  border-color: var(--fr-accent);
+  color: var(--fr-text);
+}
+
+.sub-pill.active {
+  background: var(--fr-accent-bg);
+  border-color: var(--fr-accent);
+  color: var(--fr-accent);
+  font-weight: 600;
+}
+
+.pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .collapse-toggle {

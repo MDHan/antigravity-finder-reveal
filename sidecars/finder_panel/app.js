@@ -6,72 +6,32 @@
     `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
 
   const TYPE_META = {
-    slides: {
-      label: '演示文稿',
-      colorVar: 'var(--fr-slides)',
-      svg: svgIcon('<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M12 16v4M8 20h8M8 10h8M8 13h5"/>'),
-    },
-    pdf: {
-      label: 'PDF 文档',
-      colorVar: 'var(--fr-pdf)',
-      svg: svgIcon('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>'),
-    },
-    office: {
-      label: 'Word / 论文稿',
-      colorVar: 'var(--fr-office)',
-      svg: svgIcon('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 12h6M9 15h6M9 18h3"/>'),
-    },
-    data: {
-      label: '表格与数据',
-      colorVar: 'var(--fr-data)',
-      svg: svgIcon('<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16M15 4v16"/>'),
-    },
-    markdown: {
-      label: 'Markdown / 文档',
-      colorVar: 'var(--fr-markdown)',
-      svg: svgIcon('<path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M7 15V9l2.5 3L12 9v6M16 9v6m0 0-2-2m2 2 2-2"/>'),
-    },
-    web: {
-      label: '网页文件',
-      colorVar: 'var(--fr-web)',
-      svg: svgIcon('<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>'),
-    },
-    code: {
-      label: '代码与脚本',
-      colorVar: 'var(--fr-code)',
-      svg: svgIcon('<path d="m8 8-4 4 4 4M16 8l4 4-4 4M13.5 6l-3 12"/>'),
-    },
-    config: {
-      label: '配置文件',
-      colorVar: 'var(--fr-config)',
-      svg: svgIcon('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.08a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.08a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>'),
-    },
-    image: {
-      label: '图片与图表',
-      colorVar: 'var(--fr-image)',
-      svg: svgIcon('<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="9.5" r="1.5"/><path d="m21 16-5-5-6 6-2.5-2.5L3 19"/>'),
-    },
-    audio: {
-      label: '音频文件',
-      colorVar: 'var(--fr-audio)',
-      svg: svgIcon('<path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/>'),
-    },
-    video: {
-      label: '视频文件',
-      colorVar: 'var(--fr-video)',
-      svg: svgIcon('<rect x="3" y="5" width="18" height="14" rx="2"/><polygon points="10 9 16 12 10 15 10 9"/>'),
-    },
-    other: {
-      label: '其他文件',
-      colorVar: 'var(--fr-other)',
-      svg: svgIcon('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/>'),
-    },
+    slides: { label: '演示文稿', short: 'PPT', group: 'docs', colorVar: 'var(--fr-slides)', svg: svgIcon('<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M12 16v4M8 20h8M8 10h8M8 13h5"/>') },
+    pdf: { label: 'PDF 文档', short: 'PDF', group: 'docs', colorVar: 'var(--fr-pdf)', svg: svgIcon('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>') },
+    office: { label: 'Word / 论文', short: 'Word', group: 'docs', colorVar: 'var(--fr-office)', svg: svgIcon('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 12h6M9 15h6M9 18h3"/>') },
+    markdown: { label: 'Markdown', short: 'MD', group: 'docs', colorVar: 'var(--fr-markdown)', svg: svgIcon('<path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M7 15V9l2.5 3L12 9v6M16 9v6m0 0-2-2m2 2 2-2"/>') },
+    data: { label: '表格数据', short: '数据', group: 'docs', colorVar: 'var(--fr-data)', svg: svgIcon('<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16M15 4v16"/>') },
+    web: { label: '网页文件', short: '网页', group: 'dev', colorVar: 'var(--fr-web)', svg: svgIcon('<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>') },
+    code: { label: '代码脚本', short: '代码', group: 'dev', colorVar: 'var(--fr-code)', svg: svgIcon('<path d="m8 8-4 4 4 4M16 8l4 4-4 4M13.5 6l-3 12"/>') },
+    config: { label: '配置文件', short: '配置', group: 'dev', colorVar: 'var(--fr-config)', svg: svgIcon('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.08a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.08a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>') },
+    image: { label: '图片图表', short: '图片', group: 'media', colorVar: 'var(--fr-image)', svg: svgIcon('<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="9.5" r="1.5"/><path d="m21 16-5-5-6 6-2.5-2.5L3 19"/>') },
+    audio: { label: '音频文件', short: '音频', group: 'media', colorVar: 'var(--fr-audio)', svg: svgIcon('<path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/>') },
+    video: { label: '视频文件', short: '视频', group: 'media', colorVar: 'var(--fr-video)', svg: svgIcon('<rect x="3" y="5" width="18" height="14" rx="2"/><polygon points="10 9 16 12 10 15 10 9"/>') },
+    other: { label: '其他文件', short: '其他', group: 'other', colorVar: 'var(--fr-other)', svg: svgIcon('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/>') },
   };
-  const TYPE_ORDER = ['slides', 'pdf', 'office', 'data', 'markdown', 'web', 'code', 'config', 'image', 'audio', 'video', 'other'];
+
+  const GROUP_DEFS = [
+    { key: 'docs', label: '文档资料', types: ['slides', 'pdf', 'office', 'markdown', 'data'] },
+    { key: 'dev', label: '代码与网页', types: ['web', 'code', 'config'] },
+    { key: 'media', label: '多媒体', types: ['image', 'audio', 'video'] },
+    { key: 'other', label: '其他文件', types: ['other'] },
+  ];
 
   const state = {
     scope: 'current',
     items: [],
+    collapsedGroups: new Set(),
+    groupSubFilter: {},
     secondaryExpanded: false,
     contextItem: null,
     pickerItem: null,
@@ -362,27 +322,76 @@
 
     list.innerHTML = '';
 
-    // Group primary files by document type
+    // Group primary files by two-level hierarchy: top-level group + sub-type filter pills
     if (primary.length) {
-      for (const typeKey of TYPE_ORDER) {
-        const groupItems = primary.filter((i) => (i.fileType || 'other') === typeKey);
+      for (const grp of GROUP_DEFS) {
+        const groupItems = primary.filter((i) => grp.types.includes(i.fileType || 'other'));
         if (!groupItems.length) continue;
 
-        const meta = TYPE_META[typeKey];
+        const presentTypes = grp.types.filter((t) => groupItems.some((i) => (i.fileType || 'other') === t));
+        let activeSub = state.groupSubFilter[grp.key] || 'all';
+        if (activeSub !== 'all' && !presentTypes.includes(activeSub)) {
+          activeSub = 'all';
+          state.groupSubFilter[grp.key] = 'all';
+        }
+
+        const isCollapsed = state.collapsedGroups.has(grp.key);
         const sec = document.createElement('section');
         sec.className = 'section';
 
-        const header = document.createElement('div');
-        header.className = 'group-header';
-        header.innerHTML = `<span class="group-dot" style="background:${meta.colorVar}"></span><span>${meta.label}</span><span class="group-count">(${groupItems.length})</span>`;
-        sec.appendChild(header);
+        const headerBtn = document.createElement('button');
+        headerBtn.className = 'group-toggle';
+        headerBtn.setAttribute('aria-expanded', String(!isCollapsed));
+        headerBtn.innerHTML = `<span class="group-title"><span class="collapse-arrow">▸</span>${grp.label}</span><span class="group-count">${groupItems.length}</span>`;
+        headerBtn.addEventListener('click', () => {
+          if (state.collapsedGroups.has(grp.key)) state.collapsedGroups.delete(grp.key);
+          else state.collapsedGroups.add(grp.key);
+          render();
+        });
+        sec.appendChild(headerBtn);
 
-        const itemsBox = document.createElement('div');
-        itemsBox.className = 'section-items';
-        for (const item of groupItems) {
-          itemsBox.appendChild(createFileRow(item, true));
+        if (!isCollapsed) {
+          if (presentTypes.length > 1) {
+            const pills = document.createElement('div');
+            pills.className = 'sub-pills';
+
+            const allPill = document.createElement('button');
+            allPill.className = `sub-pill${activeSub === 'all' ? ' active' : ''}`;
+            allPill.textContent = `全部 ${groupItems.length}`;
+            allPill.addEventListener('click', () => {
+              state.groupSubFilter[grp.key] = 'all';
+              render();
+            });
+            pills.appendChild(allPill);
+
+            for (const t of presentTypes) {
+              const meta = TYPE_META[t];
+              const cnt = groupItems.filter((i) => (i.fileType || 'other') === t).length;
+              const pill = document.createElement('button');
+              pill.className = `sub-pill${activeSub === t ? ' active' : ''}`;
+              pill.innerHTML = `<span class="pill-dot" style="background:${meta.colorVar}"></span>${meta.short} ${cnt}`;
+              pill.addEventListener('click', () => {
+                state.groupSubFilter[grp.key] = activeSub === t ? 'all' : t;
+                render();
+              });
+              pills.appendChild(pill);
+            }
+            sec.appendChild(pills);
+          }
+
+          const visibleItems =
+            activeSub === 'all'
+              ? groupItems
+              : groupItems.filter((i) => (i.fileType || 'other') === activeSub);
+
+          const itemsBox = document.createElement('div');
+          itemsBox.className = 'section-items';
+          for (const item of visibleItems) {
+            itemsBox.appendChild(createFileRow(item, true));
+          }
+          sec.appendChild(itemsBox);
         }
-        sec.appendChild(itemsBox);
+
         list.appendChild(sec);
       }
     } else {
