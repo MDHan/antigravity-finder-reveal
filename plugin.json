@@ -1,0 +1,13 @@
+{
+  "name": "finder-reveal",
+  "displayName": "访达快捷打开",
+  "description": "自动追踪当前对话与最近新建或修改的文件，按文档类型彩色分组并折叠过程文件，支持一键在 macOS 访达中定位或选择本机 App 打开。",
+  "version": "1.0.0",
+  "logo": "assets/logo.svg",
+  "author": {
+    "name": "MDHan",
+    "url": "https://github.com/MDHan"
+  },
+  "homepage": "https://github.com/MDHan/antigravity-finder-reveal",
+  "repository": "https://github.com/MDHan/antigravity-finder-reveal"
+}

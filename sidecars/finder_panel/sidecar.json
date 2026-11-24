@@ -1,0 +1,21 @@
+{
+  "command": "node",
+  "args": ["main.mjs"],
+  "restart_policy": "on-failure",
+  "display_name": "访达快捷打开",
+  "description": "实时展示当前对话与最近修改的文件，支持点击或右键一键在 macOS 访达（Finder）中定位打开。",
+  "has_web_ui": true,
+  "agent_permissions": {
+    "allows_user_interactions": false
+  },
+  "ui_config": {
+    "display_name": "访达快捷打开",
+    "views": [
+      {
+        "path": "/",
+        "entrypoint": "SIDECAR_UI_ENTRYPOINT_AUX_PANE",
+        "title": "访达快捷打开"
+      }
+    ]
+  }
+}

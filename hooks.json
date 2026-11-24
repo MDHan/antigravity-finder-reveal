@@ -1,0 +1,16 @@
+{
+  "finder-reveal-tracker": {
+    "PostToolUse": [
+      {
+        "matcher": "write_file|edit_file|replace_file_content|multi_replace_file_content",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node ./scripts/record_file.mjs",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

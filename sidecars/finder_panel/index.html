@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>访达快捷打开</title>
+    <script src="/preload.js"></script>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <div class="title-group">
+          <h1>访达快捷打开</h1>
+          <span class="hint">按类型分组 · 一键打开、选应用或定位访达</span>
+        </div>
+        <button id="refreshBtn" class="icon-btn" title="刷新列表" aria-label="刷新列表">↻</button>
+      </header>
+
+      <div class="toolbar">
+        <div class="segmented" role="tablist">
+          <button id="tabCurrent" class="seg-btn active" data-scope="current">当前对话</button>
+          <button id="tabAll" class="seg-btn" data-scope="all">全部最近</button>
+        </div>
+        <span id="countBadge" class="count">0</span>
+      </div>
+
+      <main id="fileList" class="file-list" aria-live="polite"></main>
+    </div>
+
+    <div id="contextMenu" class="context-menu hidden" role="menu">
+      <button class="menu-item" data-action="open">用默认应用打开</button>
+      <button class="menu-item" data-action="open-with">选择应用打开…</button>
+      <div class="menu-sep"></div>
+      <button class="menu-item" data-action="reveal">在访达中显示 (Reveal in Finder)</button>
+      <button class="menu-item" data-action="dir">打开所在文件夹</button>
+      <div class="menu-sep"></div>
+      <button class="menu-item" data-action="copy">复制完整路径</button>
+    </div>
+
+    <div id="appPicker" class="app-picker hidden" role="menu">
+      <div class="picker-header">
+        <input id="appSearch" class="picker-search" type="text" placeholder="搜索应用…" />
+      </div>
+      <div id="appPickerList" class="picker-list"></div>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
