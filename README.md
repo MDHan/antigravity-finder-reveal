@@ -51,19 +51,29 @@
 <a id="install"></a>
 ## 🚀 快速安装（Installation）
 
-### 方式一：使用 `agy` CLI 一键安装（推荐）
+### 方式一：一句话让 Antigravity AI 自动安装（最简单 · 推荐）
+
+直接把仓库链接发给 Antigravity，说一句：
+
+```text
+https://github.com/MDHan/antigravity-finder-reveal 帮我安装一下这个插件
+```
+
+AI 会自动克隆到插件目录并验证加载，全程无需手动敲命令。
+
+### 方式二：使用 `agy` CLI 一键安装
 
 ```bash
 agy plugin install https://github.com/MDHan/antigravity-finder-reveal
 ```
 
-### 方式二：使用 `git clone` 克隆到插件目录
+### 方式三：使用 `git clone` 克隆到插件目录
 
 ```bash
 git clone https://github.com/MDHan/antigravity-finder-reveal.git ~/.gemini/config/plugins/finder-reveal
 ```
 
-### 方式三：手动下载 ZIP
+### 方式四：手动下载 ZIP
 
 1. 点击本仓库 **Code → Download ZIP** 并解压。
 2. 将目录重命名为 `finder-reveal`，放入 `~/.gemini/config/plugins/finder-reveal/`（确保 `plugin.json` 直接位于该目录下）。
