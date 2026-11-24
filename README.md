@@ -13,9 +13,18 @@
 [![Zero Token Cost](https://img.shields.io/badge/Token_Cost-Zero-16a34a?style=flat-square)](https://github.com/MDHan/antigravity-finder-reveal)
 [![License: MIT](https://img.shields.io/badge/License-MIT-f59e0b?style=flat-square)](LICENSE)
 
-[核心特性](#features) · [快速安装](#install) · [使用说明](#usage) · [目录结构](#structure) · [English Guide](#english-guide)
+[界面预览](#preview) · [核心特性](#features) · [快速安装](#install) · [使用说明](#usage) · [目录结构](#structure) · [English Guide](#english-guide)
 
 </div>
+
+---
+
+<a id="preview"></a>
+## ✨ 界面预览（Visual Showcase）
+
+浅色 / 深色主题自动跟随 Antigravity 客户端，一级大类可折叠、二级细类胶囊一键筛选，过程与辅助文件默认折叠在底部：
+
+![右侧辅助边栏浅色与深色主题预览](assets/preview-sidebar.png)
 
 ---
 
