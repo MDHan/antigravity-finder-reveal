@@ -49,7 +49,8 @@ const SUPPORT_EXTS = new Set([
 
 const SLIDES_EXTS = new Set(['.pptx', '.ppt', '.key', '.odp']);
 const PDF_EXTS = new Set(['.pdf']);
-const OFFICE_EXTS = new Set(['.docx', '.doc', '.pages', '.rtf', '.tex', '.odt']);
+const OFFICE_EXTS = new Set(['.docx', '.doc', '.pages', '.rtf', '.odt']);
+const LATEX_EXTS = new Set(['.tex', '.bib', '.cls', '.sty', '.bst']);
 const DATA_EXTS = new Set(['.xlsx', '.xls', '.numbers', '.csv', '.tsv', '.parquet', '.jsonl', '.db', '.sqlite']);
 const MARKDOWN_EXTS = new Set(['.md', '.mdx', '.txt', '.org', '.rst']);
 const WEB_EXTS = new Set(['.html', '.htm', '.xhtml', '.mhtml']);
@@ -63,7 +64,8 @@ const VIDEO_EXTS = new Set(['.mp4', '.mov', '.mkv', '.avi', '.webm', '.m4v']);
 const RECOMMENDED_APPS = {
   slides: ['Microsoft PowerPoint', 'Keynote', 'WPS Office', 'Preview'],
   pdf: ['Preview', 'Adobe Acrobat', 'Skim', 'Google Chrome', 'Safari'],
-  office: ['Microsoft Word', 'Pages', 'WPS Office', 'TextEdit', 'Visual Studio Code'],
+  office: ['Microsoft Word', 'Pages', 'WPS Office', 'TextEdit'],
+  latex: ['Visual Studio Code', 'Cursor', 'Antigravity', 'TeXShop', 'Texifier', 'Texpad', 'Sublime Text', 'TextEdit'],
   data: ['Microsoft Excel', 'Numbers', 'WPS Office', 'Visual Studio Code', 'Cursor'],
   markdown: ['Typora', 'Obsidian', 'Visual Studio Code', 'Cursor', 'Antigravity', 'TextEdit'],
   web: ['Google Chrome', 'Safari', 'Arc', 'Firefox', 'Microsoft Edge', 'Visual Studio Code', 'Cursor'],
@@ -265,6 +267,7 @@ function detectFileType(filePath) {
   if (SLIDES_EXTS.has(ext)) return 'slides';
   if (PDF_EXTS.has(ext)) return 'pdf';
   if (OFFICE_EXTS.has(ext)) return 'office';
+  if (LATEX_EXTS.has(ext)) return 'latex';
   if (DATA_EXTS.has(ext)) return 'data';
   if (MARKDOWN_EXTS.has(ext)) return 'markdown';
   if (WEB_EXTS.has(ext)) return 'web';

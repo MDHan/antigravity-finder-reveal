@@ -8,7 +8,8 @@
   const TYPE_META = {
     slides: { label: '演示文稿', short: 'PPT', group: 'docs', colorVar: 'var(--fr-slides)', svg: svgIcon('<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M12 16v4M8 20h8M8 10h8M8 13h5"/>') },
     pdf: { label: 'PDF 文档', short: 'PDF', group: 'docs', colorVar: 'var(--fr-pdf)', svg: svgIcon('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>') },
-    office: { label: 'Word / 论文', short: 'Word', group: 'docs', colorVar: 'var(--fr-office)', svg: svgIcon('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 12h6M9 15h6M9 18h3"/>') },
+    office: { label: 'Word 文档', short: 'Word', group: 'docs', colorVar: 'var(--fr-office)', svg: svgIcon('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 12h6M9 15h6M9 18h3"/>') },
+    latex: { label: 'LaTeX', short: 'LaTeX', group: 'docs', colorVar: 'var(--fr-latex)', svg: svgIcon('<path d="M18 5H7l6 7-6 7h11"/>') },
     markdown: { label: 'Markdown', short: 'MD', group: 'docs', colorVar: 'var(--fr-markdown)', svg: svgIcon('<path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M7 15V9l2.5 3L12 9v6M16 9v6m0 0-2-2m2 2 2-2"/>') },
     data: { label: '表格数据', short: '数据', group: 'docs', colorVar: 'var(--fr-data)', svg: svgIcon('<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16M15 4v16"/>') },
     web: { label: '网页文件', short: '网页', group: 'dev', colorVar: 'var(--fr-web)', svg: svgIcon('<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>') },
@@ -21,7 +22,7 @@
   };
 
   const GROUP_DEFS = [
-    { key: 'docs', label: '文档资料', types: ['slides', 'pdf', 'office', 'markdown', 'data'] },
+    { key: 'docs', label: '文档资料', types: ['slides', 'pdf', 'latex', 'office', 'markdown', 'data'] },
     { key: 'media', label: '多媒体', types: ['image', 'audio', 'video'] },
     { key: 'dev', label: '代码与网页', types: ['web', 'code', 'config'] },
     { key: 'other', label: '其他文件', types: ['other'] },
