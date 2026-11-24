@@ -47,17 +47,29 @@ const SUPPORT_EXTS = new Set([
   '.css',
 ]);
 
-const DOC_EXTS = new Set(['.md', '.mdx', '.txt', '.pdf', '.doc', '.docx', '.ppt', '.pptx', '.xls', '.xlsx', '.rtf', '.tex', '.org']);
-const CODE_EXTS = new Set(['.js', '.mjs', '.cjs', '.ts', '.tsx', '.jsx', '.py', '.sh', '.zsh', '.bash', '.go', '.rs', '.java', '.kt', '.swift', '.c', '.cpp', '.h', '.hpp', '.html', '.css', '.scss', '.sql', '.vue', '.svelte', '.rb', '.php']);
-const CONFIG_EXTS = new Set(['.json', '.jsonc', '.yaml', '.yml', '.toml', '.ini', '.conf', '.env', '.xml', '.csv', '.tsv']);
-const MEDIA_EXTS = new Set(['.png', '.jpg', '.jpeg', '.svg', '.gif', '.webp', '.bmp', '.tiff', '.mp4', '.mov', '.mp3', '.wav', '.m4a']);
+const SLIDES_EXTS = new Set(['.pptx', '.ppt', '.key', '.odp']);
+const PDF_EXTS = new Set(['.pdf']);
+const OFFICE_EXTS = new Set(['.docx', '.doc', '.pages', '.rtf', '.tex', '.odt']);
+const DATA_EXTS = new Set(['.xlsx', '.xls', '.numbers', '.csv', '.tsv', '.parquet', '.jsonl', '.db', '.sqlite']);
+const MARKDOWN_EXTS = new Set(['.md', '.mdx', '.txt', '.org', '.rst']);
+const CODE_EXTS = new Set(['.js', '.mjs', '.cjs', '.ts', '.tsx', '.jsx', '.py', '.ipynb', '.sh', '.zsh', '.bash', '.go', '.rs', '.java', '.kt', '.swift', '.c', '.cpp', '.h', '.hpp', '.html', '.css', '.scss', '.sql', '.vue', '.svelte', '.rb', '.php']);
+const CONFIG_EXTS = new Set(['.json', '.jsonc', '.yaml', '.yml', '.toml', '.ini', '.conf', '.env', '.xml']);
+const IMAGE_EXTS = new Set(['.png', '.jpg', '.jpeg', '.svg', '.gif', '.webp', '.bmp', '.tiff', '.heic', '.eps']);
+const AUDIO_EXTS = new Set(['.wav', '.mp3', '.flac', '.m4a', '.aac', '.ogg', '.opus', '.aiff']);
+const VIDEO_EXTS = new Set(['.mp4', '.mov', '.mkv', '.avi', '.webm', '.m4v']);
 
 // Preferred apps by file group (shown at top of picker if installed on this Mac)
 const RECOMMENDED_APPS = {
-  doc: ['Typora', 'Obsidian', 'Visual Studio Code', 'Cursor', 'Antigravity', 'Preview', 'TextEdit', 'Pages', 'Microsoft Word', 'Microsoft PowerPoint', 'Keynote', 'WPS Office'],
+  slides: ['Microsoft PowerPoint', 'Keynote', 'WPS Office', 'Preview'],
+  pdf: ['Preview', 'Adobe Acrobat', 'Skim', 'Google Chrome', 'Safari'],
+  office: ['Microsoft Word', 'Pages', 'WPS Office', 'TextEdit', 'Visual Studio Code'],
+  data: ['Microsoft Excel', 'Numbers', 'WPS Office', 'Visual Studio Code', 'Cursor'],
+  markdown: ['Typora', 'Obsidian', 'Visual Studio Code', 'Cursor', 'Antigravity', 'TextEdit'],
   code: ['Visual Studio Code', 'Cursor', 'Antigravity', 'Zed', 'Sublime Text', 'Xcode', 'PyCharm', 'WebStorm', 'TextEdit'],
-  config: ['Visual Studio Code', 'Cursor', 'Antigravity', 'Sublime Text', 'TextEdit', 'Microsoft Excel', 'Numbers'],
-  media: ['Preview', 'Google Chrome', 'Safari', 'Figma', 'QuickTime Player', 'IINA'],
+  config: ['Visual Studio Code', 'Cursor', 'Antigravity', 'Sublime Text', 'TextEdit'],
+  image: ['Preview', 'Figma', 'Google Chrome', 'Safari', 'Photos'],
+  audio: ['QuickTime Player', 'IINA', 'VLC', 'Audacity', 'Music'],
+  video: ['QuickTime Player', 'IINA', 'VLC', 'Google Chrome'],
   other: ['Visual Studio Code', 'TextEdit', 'Preview', 'Finder'],
 };
 
@@ -245,13 +257,19 @@ function detectFileType(filePath) {
   const base = basename(filePath).toLowerCase();
   const ext = extname(filePath).toLowerCase();
 
-  if (base === 'skill.md' || base === 'gemini.md' || base === 'agents.md' || base === 'plugin.json') {
+  if (base === 'plugin.json') {
     return 'config';
   }
-  if (DOC_EXTS.has(ext)) return 'doc';
+  if (SLIDES_EXTS.has(ext)) return 'slides';
+  if (PDF_EXTS.has(ext)) return 'pdf';
+  if (OFFICE_EXTS.has(ext)) return 'office';
+  if (DATA_EXTS.has(ext)) return 'data';
+  if (MARKDOWN_EXTS.has(ext)) return 'markdown';
   if (CODE_EXTS.has(ext)) return 'code';
   if (CONFIG_EXTS.has(ext)) return 'config';
-  if (MEDIA_EXTS.has(ext)) return 'media';
+  if (IMAGE_EXTS.has(ext)) return 'image';
+  if (AUDIO_EXTS.has(ext)) return 'audio';
+  if (VIDEO_EXTS.has(ext)) return 'video';
   return 'other';
 }
 

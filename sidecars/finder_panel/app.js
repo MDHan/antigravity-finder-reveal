@@ -2,14 +2,67 @@
   const REFRESH_MS = 4000;
   const $ = (id) => document.getElementById(id);
 
+  const svgIcon = (paths) =>
+    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
+
   const TYPE_META = {
-    doc: { label: '文档与笔记', icon: '📄', colorVar: 'var(--fr-doc)' },
-    code: { label: '代码与脚本', icon: '</>', colorVar: 'var(--fr-code)' },
-    config: { label: '配置与技能', icon: '⚙', colorVar: 'var(--fr-config)' },
-    media: { label: '图片与媒体', icon: '🖼', colorVar: 'var(--fr-media)' },
-    other: { label: '其他文件', icon: '📁', colorVar: 'var(--fr-other)' },
+    slides: {
+      label: '演示文稿',
+      colorVar: 'var(--fr-slides)',
+      svg: svgIcon('<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M12 16v4M8 20h8M8 10h8M8 13h5"/>'),
+    },
+    pdf: {
+      label: 'PDF 文档',
+      colorVar: 'var(--fr-pdf)',
+      svg: svgIcon('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>'),
+    },
+    office: {
+      label: 'Word / 论文稿',
+      colorVar: 'var(--fr-office)',
+      svg: svgIcon('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 12h6M9 15h6M9 18h3"/>'),
+    },
+    data: {
+      label: '表格与数据',
+      colorVar: 'var(--fr-data)',
+      svg: svgIcon('<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16M15 4v16"/>'),
+    },
+    markdown: {
+      label: 'Markdown / 文档',
+      colorVar: 'var(--fr-markdown)',
+      svg: svgIcon('<path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M7 15V9l2.5 3L12 9v6M16 9v6m0 0-2-2m2 2 2-2"/>'),
+    },
+    code: {
+      label: '代码与脚本',
+      colorVar: 'var(--fr-code)',
+      svg: svgIcon('<path d="m8 8-4 4 4 4M16 8l4 4-4 4M13.5 6l-3 12"/>'),
+    },
+    config: {
+      label: '配置文件',
+      colorVar: 'var(--fr-config)',
+      svg: svgIcon('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.08a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.08a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>'),
+    },
+    image: {
+      label: '图片与图表',
+      colorVar: 'var(--fr-image)',
+      svg: svgIcon('<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="9.5" r="1.5"/><path d="m21 16-5-5-6 6-2.5-2.5L3 19"/>'),
+    },
+    audio: {
+      label: '音频文件',
+      colorVar: 'var(--fr-audio)',
+      svg: svgIcon('<path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/>'),
+    },
+    video: {
+      label: '视频文件',
+      colorVar: 'var(--fr-video)',
+      svg: svgIcon('<rect x="3" y="5" width="18" height="14" rx="2"/><polygon points="10 9 16 12 10 15 10 9"/>'),
+    },
+    other: {
+      label: '其他文件',
+      colorVar: 'var(--fr-other)',
+      svg: svgIcon('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/>'),
+    },
   };
-  const TYPE_ORDER = ['doc', 'code', 'config', 'media', 'other'];
+  const TYPE_ORDER = ['slides', 'pdf', 'office', 'data', 'markdown', 'code', 'config', 'image', 'audio', 'video', 'other'];
 
   const state = {
     scope: 'current',
@@ -196,7 +249,7 @@
 
     const icon = document.createElement('div');
     icon.className = 'type-icon';
-    icon.textContent = meta.icon;
+    icon.innerHTML = meta.svg;
     row.appendChild(icon);
 
     const main = document.createElement('div');
