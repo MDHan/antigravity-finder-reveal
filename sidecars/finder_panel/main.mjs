@@ -13,6 +13,7 @@ const FILE_EDIT_TOOLS = new Set([
   'multi_replace_file_content',
 ]);
 const ID_RE = /^[0-9a-f-]{8,}$/i;
+const MAX_RECENT_CONVERSATIONS = 15;
 
 const PROCESS_FILENAMES = new Set([
   'learning_proposal.md',
@@ -99,7 +100,20 @@ function normalizeRawPath(raw) {
     }
   }
   s = s.trim();
-  return s ? resolve(s) : null;
+  if (!s || !s.startsWith('/')) return null;
+  return resolve(s);
+}
+
+function parseFileUri(rawUriPath) {
+  if (typeof rawUriPath !== 'string') return null;
+  // Strip line-number anchor or query string if present
+  let cleaned = rawUriPath.replace(/[#?].*$/, '').replace(/[),.;:]+$/, '');
+  try {
+    cleaned = decodeURIComponent(cleaned);
+  } catch {
+    // Keep as-is if malformed percent-encoding.
+  }
+  return normalizeRawPath('/' + cleaned.replace(/^\/+/, ''));
 }
 
 function getAppDataDir() {
@@ -120,8 +134,9 @@ function readHookRecords() {
     return parsed
       .map((item) => {
         const cleanPath = normalizeRawPath(item?.path);
-        if (!cleanPath) return null;
-        return { ...item, path: cleanPath };
+        const convId = typeof item?.conversationId === 'string' ? item.conversationId.trim() : '';
+        if (!cleanPath || !ID_RE.test(convId)) return null;
+        return { ...item, path: cleanPath, conversationId: convId };
       })
       .filter(Boolean);
   } catch {
@@ -147,27 +162,76 @@ function readTranscriptRecords(conversationId) {
       } catch {
         continue;
       }
-      if (!Array.isArray(step.tool_calls)) continue;
       const ts = step.created_at ? Date.parse(step.created_at) : Date.now();
-      for (const tc of step.tool_calls) {
-        if (!tc || !FILE_EDIT_TOOLS.has(tc.name)) continue;
-        const args = tc.args || {};
-        const cleanPath = normalizeRawPath(
-          args.Path || args.TargetFile || args.path || args.targetFile,
-        );
-        if (!cleanPath) continue;
-        records.push({
-          path: cleanPath,
-          tool: tc.name,
-          conversationId,
-          updatedAt: Number.isFinite(ts) ? ts : Date.now(),
-        });
+      const updatedAt = Number.isFinite(ts) ? ts : Date.now();
+
+      // 1. Direct file-edit tool calls (write_file, edit_file, etc.)
+      if (Array.isArray(step.tool_calls)) {
+        for (const tc of step.tool_calls) {
+          if (!tc || !FILE_EDIT_TOOLS.has(tc.name)) continue;
+          const args = tc.args || {};
+          const cleanPath = normalizeRawPath(
+            args.Path || args.TargetFile || args.path || args.targetFile,
+          );
+          if (!cleanPath) continue;
+          records.push({
+            path: cleanPath,
+            tool: tc.name,
+            conversationId,
+            updatedAt,
+          });
+        }
+      }
+
+      // 2. Assistant-delivered file:// links in PLANNER_RESPONSE.content
+      //    (captures files generated/modified via run_command scripts such as .pptx, .pdf, .docx, etc.)
+      if (step.type === 'PLANNER_RESPONSE' && typeof step.content === 'string' && step.content.includes('file:///')) {
+        for (const m of step.content.matchAll(/file:\/\/\/([^)\s"<>]+)/g)) {
+          const cleanPath = parseFileUri(m[1]);
+          if (!cleanPath) continue;
+          records.push({
+            path: cleanPath,
+            tool: 'file_link',
+            conversationId,
+            updatedAt,
+          });
+        }
       }
     }
   } catch {
     return [];
   }
   return records;
+}
+
+function readRecentConversationsTranscripts() {
+  const appData = getAppDataDir();
+  if (!appData) return [];
+  const brainDir = join(appData, 'brain');
+  if (!existsSync(brainDir)) return [];
+
+  const convs = [];
+  try {
+    for (const entry of readdirSync(brainDir)) {
+      if (!ID_RE.test(entry)) continue;
+      const tPath = join(brainDir, entry, '.system_generated', 'logs', 'transcript.jsonl');
+      try {
+        const st = statSync(tPath);
+        convs.push({ id: entry, mtimeMs: st.mtimeMs });
+      } catch {
+        // Ignore conversations without transcript.
+      }
+    }
+  } catch {
+    return [];
+  }
+
+  convs.sort((a, b) => b.mtimeMs - a.mtimeMs);
+  const allRecords = [];
+  for (const conv of convs.slice(0, MAX_RECENT_CONVERSATIONS)) {
+    allRecords.push(...readTranscriptRecords(conv.id));
+  }
+  return allRecords;
 }
 
 function shortenHome(p) {
@@ -233,15 +297,25 @@ function classifyFile(filePath, exists) {
   return { category: 'primary', fileType, tag: '' };
 }
 
-function buildFilesList(conversationId, scope) {
-  const hookRecords = readHookRecords();
-  const transcriptRecords = readTranscriptRecords(conversationId);
+export function buildFilesList(conversationId, scope) {
+  const validConvId = typeof conversationId === 'string' && ID_RE.test(conversationId.trim())
+    ? conversationId.trim()
+    : '';
 
-  const merged = [...transcriptRecords, ...hookRecords];
-  const filtered =
-    scope === 'current' && conversationId
-      ? merged.filter((r) => r.conversationId === conversationId)
-      : merged;
+  let filtered = [];
+  if (scope === 'current') {
+    // Strict session isolation: never fall back to other conversations if conversationId is absent.
+    if (!validConvId) {
+      return { conversationId: '', scope: 'current', platform: process.platform, items: [] };
+    }
+    const transcriptRecords = readTranscriptRecords(validConvId);
+    const hookRecords = readHookRecords().filter((r) => r.conversationId === validConvId);
+    filtered = [...transcriptRecords, ...hookRecords];
+  } else {
+    const recentTranscripts = readRecentConversationsTranscripts();
+    const hookRecords = readHookRecords();
+    filtered = [...recentTranscripts, ...hookRecords];
+  }
 
   const byPath = new Map();
   for (const item of filtered) {
@@ -265,6 +339,9 @@ function buildFilesList(conversationId, scope) {
       } catch {
         exists = false;
       }
+      // Skip non-existent file_link mentions (e.g., example paths in markdown docs)
+      if (!exists && item.tool === 'file_link') return null;
+
       const { category, fileType, tag } = classifyFile(item.path, exists);
       return {
         path: item.path,
@@ -273,7 +350,7 @@ function buildFilesList(conversationId, scope) {
         ext: extname(item.path).toLowerCase(),
         tool: item.tool || 'edit',
         conversationId: item.conversationId || '',
-        isCurrentConversation: Boolean(conversationId && item.conversationId === conversationId),
+        isCurrentConversation: Boolean(validConvId && item.conversationId === validConvId),
         updatedAt: item.updatedAt || 0,
         exists,
         isDir,
@@ -281,10 +358,11 @@ function buildFilesList(conversationId, scope) {
         fileType,
         tag,
       };
-    });
+    })
+    .filter(Boolean);
 
   return {
-    conversationId,
+    conversationId: validConvId,
     scope,
     platform: process.platform,
     items,
@@ -301,80 +379,80 @@ function runOpen(args) {
   });
 }
 
-const app = new SidecarApp();
+if (process.env.ANTIGRAVITY_SIDECAR_WEB_PORT) {
+  const app = new SidecarApp();
 
-app.page('/', () => new Response(readFileSync(join(__dirname, 'index.html'), 'utf-8'), { contentType: 'text/html; charset=utf-8' }));
-app.page('/styles.css', () => new Response(readFileSync(join(__dirname, 'styles.css'), 'utf-8'), { contentType: 'text/css; charset=utf-8' }));
-app.page('/app.js', () => new Response(readFileSync(join(__dirname, 'app.js'), 'utf-8'), { contentType: 'application/javascript; charset=utf-8' }));
+  app.page('/', () => new Response(readFileSync(join(__dirname, 'index.html'), 'utf-8'), { contentType: 'text/html; charset=utf-8' }));
+  app.page('/styles.css', () => new Response(readFileSync(join(__dirname, 'styles.css'), 'utf-8'), { contentType: 'text/css; charset=utf-8' }));
+  app.page('/app.js', () => new Response(readFileSync(join(__dirname, 'app.js'), 'utf-8'), { contentType: 'application/javascript; charset=utf-8' }));
 
-app.api(
-  '/api/files',
-  async (data) => {
-    const convId =
-      (typeof data?.conversationId === 'string' && data.conversationId.trim()) ||
-      app.config.conversationId ||
-      '';
-    const scope = data?.scope === 'all' ? 'all' : 'current';
-    return buildFilesList(convId, scope);
-  },
-  'GET',
-);
+  app.api(
+    '/api/files',
+    async (data) => {
+      // Strictly use the requesting iframe's own conversationId (never fallback to shared process env)
+      const convId = typeof data?.conversationId === 'string' ? data.conversationId.trim() : '';
+      const scope = data?.scope === 'all' ? 'all' : 'current';
+      return buildFilesList(convId, scope);
+    },
+    'GET',
+  );
 
-app.api(
-  '/api/apps',
-  async (data) => {
-    const fileType = typeof data?.fileType === 'string' ? data.fileType : 'other';
-    const allApps = listInstalledApps();
-    const installedSet = new Set(allApps);
-    const prefs = RECOMMENDED_APPS[fileType] || RECOMMENDED_APPS.other;
-    const recommended = prefs.filter((name) => installedSet.has(name));
-    const recSet = new Set(recommended);
-    const others = allApps.filter((name) => !recSet.has(name));
-    return { recommended, others };
-  },
-  'GET',
-);
+  app.api(
+    '/api/apps',
+    async (data) => {
+      const fileType = typeof data?.fileType === 'string' ? data.fileType : 'other';
+      const allApps = listInstalledApps();
+      const installedSet = new Set(allApps);
+      const prefs = RECOMMENDED_APPS[fileType] || RECOMMENDED_APPS.other;
+      const recommended = prefs.filter((name) => installedSet.has(name));
+      const recSet = new Set(recommended);
+      const others = allApps.filter((name) => !recSet.has(name));
+      return { recommended, others };
+    },
+    'GET',
+  );
 
-app.api(
-  '/api/reveal',
-  async (data) => {
-    const target = normalizeRawPath(data?.path);
-    if (!target) throw new Error('Missing file path');
-    const mode = data?.mode || 'reveal';
-    const appName = typeof data?.appName === 'string' ? data.appName.trim() : '';
+  app.api(
+    '/api/reveal',
+    async (data) => {
+      const target = normalizeRawPath(data?.path);
+      if (!target) throw new Error('Missing file path');
+      const mode = data?.mode || 'reveal';
+      const appName = typeof data?.appName === 'string' ? data.appName.trim() : '';
 
-    if (mode === 'open') {
-      if (!existsSync(target)) throw new Error('文件不存在，无法打开');
-      if (process.platform === 'darwin') {
-        const args = appName ? ['-a', appName, target] : [target];
-        await runOpen(args);
-      } else {
-        await runOpen([target]);
+      if (mode === 'open') {
+        if (!existsSync(target)) throw new Error('文件不存在，无法打开');
+        if (process.platform === 'darwin') {
+          const args = appName ? ['-a', appName, target] : [target];
+          await runOpen(args);
+        } else {
+          await runOpen([target]);
+        }
+        return { ok: true, opened: target, appName: appName || '默认应用' };
       }
-      return { ok: true, opened: target, appName: appName || '默认应用' };
-    }
 
-    if (mode === 'dir') {
-      const dir = existsSync(target) && statSync(target).isDirectory() ? target : dirname(target);
-      if (!existsSync(dir)) throw new Error('Directory does not exist');
-      await runOpen([dir]);
-      return { ok: true, revealed: dir };
-    }
+      if (mode === 'dir') {
+        const dir = existsSync(target) && statSync(target).isDirectory() ? target : dirname(target);
+        if (!existsSync(dir)) throw new Error('Directory does not exist');
+        await runOpen([dir]);
+        return { ok: true, revealed: dir };
+      }
 
-    if (existsSync(target)) {
-      const args = process.platform === 'darwin' ? ['-R', target] : process.platform === 'win32' ? [`/select,${target}`] : [dirname(target)];
-      await runOpen(args);
-      return { ok: true, revealed: target };
-    }
+      if (existsSync(target)) {
+        const args = process.platform === 'darwin' ? ['-R', target] : process.platform === 'win32' ? [`/select,${target}`] : [dirname(target)];
+        await runOpen(args);
+        return { ok: true, revealed: target };
+      }
 
-    const parent = dirname(target);
-    if (existsSync(parent)) {
-      await runOpen([parent]);
-      return { ok: true, revealed: parent, fallbackToParent: true };
-    }
-    throw new Error('File and parent directory do not exist');
-  },
-  'POST',
-);
+      const parent = dirname(target);
+      if (existsSync(parent)) {
+        await runOpen([parent]);
+        return { ok: true, revealed: parent, fallbackToParent: true };
+      }
+      throw new Error('File and parent directory do not exist');
+    },
+    'POST',
+  );
 
-app.run();
+  app.run();
+}

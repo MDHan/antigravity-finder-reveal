@@ -1,8 +1,9 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
-import { dirname, join, resolve } from 'node:path';
+import { join, resolve } from 'node:path';
 
 const MAX_ITEMS = 200;
+const ID_RE = /^[0-9a-f-]{8,}$/i;
 
 function getStorePath() {
   const base =
@@ -14,9 +15,20 @@ function getStorePath() {
 
 function extractPath(args) {
   if (!args || typeof args !== 'object') return null;
-  const raw = args.Path || args.TargetFile || args.path || args.targetFile;
-  if (typeof raw !== 'string' || !raw.trim()) return null;
-  return resolve(raw.trim());
+  let raw = args.Path || args.TargetFile || args.path || args.targetFile;
+  if (typeof raw !== 'string') return null;
+  raw = raw.trim();
+  if ((raw.startsWith('"') && raw.endsWith('"')) || (raw.startsWith("'") && raw.endsWith("'"))) {
+    try {
+      const parsed = JSON.parse(raw);
+      raw = typeof parsed === 'string' ? parsed : raw.slice(1, -1);
+    } catch {
+      raw = raw.slice(1, -1);
+    }
+  }
+  raw = raw.trim();
+  if (!raw || !raw.startsWith('/')) return null;
+  return resolve(raw);
 }
 
 let input = '';
@@ -31,9 +43,11 @@ process.stdin.on('end', () => {
       process.stdout.write('{}\n');
       return;
     }
+    const convId = typeof payload.conversationId === 'string' ? payload.conversationId.trim() : '';
     const toolCall = payload.toolCall || {};
     const filePath = extractPath(toolCall.args);
-    if (filePath) {
+    // Require a valid conversationId so entries never leak across sessions
+    if (filePath && ID_RE.test(convId)) {
       const storePath = getStorePath();
       let list = [];
       if (existsSync(storePath)) {
@@ -47,7 +61,7 @@ process.stdin.on('end', () => {
       const entry = {
         path: filePath,
         tool: toolCall.name || 'edit',
-        conversationId: payload.conversationId || '',
+        conversationId: convId,
         updatedAt: Date.now(),
       };
       const filtered = list.filter(
