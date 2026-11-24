@@ -22,8 +22,8 @@
 
   const GROUP_DEFS = [
     { key: 'docs', label: '文档资料', types: ['slides', 'pdf', 'office', 'markdown', 'data'] },
-    { key: 'dev', label: '代码与网页', types: ['web', 'code', 'config'] },
     { key: 'media', label: '多媒体', types: ['image', 'audio', 'video'] },
+    { key: 'dev', label: '代码与网页', types: ['web', 'code', 'config'] },
     { key: 'other', label: '其他文件', types: ['other'] },
   ];
 
@@ -379,10 +379,11 @@
             sec.appendChild(pills);
           }
 
-          const visibleItems =
+          const visibleItems = (
             activeSub === 'all'
               ? groupItems
-              : groupItems.filter((i) => (i.fileType || 'other') === activeSub);
+              : groupItems.filter((i) => (i.fileType || 'other') === activeSub)
+          ).slice().sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
 
           const itemsBox = document.createElement('div');
           itemsBox.className = 'section-items';
