@@ -287,7 +287,6 @@ function classifyFile(filePath, exists) {
   if (
     lowerPath.includes('/.gemini/antigravity/brain/') ||
     lowerPath.includes('/.system_generated/') ||
-    lowerPath.includes('/scratch/') ||
     lowerPath.startsWith('/tmp/') ||
     lowerPath.startsWith('/private/tmp/') ||
     PROCESS_FILENAMES.has(base)
