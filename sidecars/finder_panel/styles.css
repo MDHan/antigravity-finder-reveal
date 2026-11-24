@@ -26,6 +26,8 @@
   --fr-data-bg: #f0fdfa;
   --fr-markdown: #2563eb;
   --fr-markdown-bg: #eff6ff;
+  --fr-web: #0284c7;
+  --fr-web-bg: #f0f9ff;
   --fr-code: #7c3aed;
   --fr-code-bg: #f5f3ff;
   --fr-config: #d97706;
@@ -67,6 +69,8 @@ html[data-theme="dark"] {
   --fr-data-bg: rgba(45, 212, 191, 0.16);
   --fr-markdown: #60a5fa;
   --fr-markdown-bg: rgba(96, 165, 250, 0.16);
+  --fr-web: #38bdf8;
+  --fr-web-bg: rgba(56, 189, 248, 0.16);
   --fr-code: #a78bfa;
   --fr-code-bg: rgba(167, 139, 250, 0.16);
   --fr-config: #fbbf24;
@@ -281,6 +285,7 @@ html, body {
 .file-item.type-office { --item-color: var(--fr-office); --item-bg: var(--fr-office-bg); }
 .file-item.type-data { --item-color: var(--fr-data); --item-bg: var(--fr-data-bg); }
 .file-item.type-markdown { --item-color: var(--fr-markdown); --item-bg: var(--fr-markdown-bg); }
+.file-item.type-web { --item-color: var(--fr-web); --item-bg: var(--fr-web-bg); }
 .file-item.type-code { --item-color: var(--fr-code); --item-bg: var(--fr-code-bg); }
 .file-item.type-config { --item-color: var(--fr-config); --item-bg: var(--fr-config-bg); }
 .file-item.type-image { --item-color: var(--fr-image); --item-bg: var(--fr-image-bg); }

@@ -30,6 +30,7 @@
     - 🟦 **Word / 论文稿**（`DOC`：`.docx`、`.doc`、`.pages`、`.tex`、`.rtf`）
     - 🟩 **表格与数据**（`TBL`：`.xlsx`、`.csv`、`.tsv`、`.parquet`、`.jsonl` 等）
     - 🔷 **Markdown / 文档**（`.md`、`.mdx`、`.txt`、`.org` 等，所有 Markdown 文档独立归类）
+    - 🌐 **网页文件**（`.html`、`.htm`、`.xhtml`、`.mhtml`）
     - 🟪 **代码与脚本**（`.py`、`.ipynb`、`.ts`、`.js`、`.sh`、`.go`、`.cpp` 等）
     - 🟨 **配置文件**（`.json`、`.yaml`、`.toml`、`.env`、`.ini` 等）
     - 🟢 **图片与图表**（`IMG`：`.png`、`.jpg`、`.svg`、`.webp` 等）

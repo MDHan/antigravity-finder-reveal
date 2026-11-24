@@ -31,6 +31,11 @@
       colorVar: 'var(--fr-markdown)',
       svg: svgIcon('<path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M7 15V9l2.5 3L12 9v6M16 9v6m0 0-2-2m2 2 2-2"/>'),
     },
+    web: {
+      label: '网页文件',
+      colorVar: 'var(--fr-web)',
+      svg: svgIcon('<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>'),
+    },
     code: {
       label: '代码与脚本',
       colorVar: 'var(--fr-code)',
@@ -62,7 +67,7 @@
       svg: svgIcon('<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/>'),
     },
   };
-  const TYPE_ORDER = ['slides', 'pdf', 'office', 'data', 'markdown', 'code', 'config', 'image', 'audio', 'video', 'other'];
+  const TYPE_ORDER = ['slides', 'pdf', 'office', 'data', 'markdown', 'web', 'code', 'config', 'image', 'audio', 'video', 'other'];
 
   const state = {
     scope: 'current',

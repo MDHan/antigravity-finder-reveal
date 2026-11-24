@@ -52,7 +52,8 @@ const PDF_EXTS = new Set(['.pdf']);
 const OFFICE_EXTS = new Set(['.docx', '.doc', '.pages', '.rtf', '.tex', '.odt']);
 const DATA_EXTS = new Set(['.xlsx', '.xls', '.numbers', '.csv', '.tsv', '.parquet', '.jsonl', '.db', '.sqlite']);
 const MARKDOWN_EXTS = new Set(['.md', '.mdx', '.txt', '.org', '.rst']);
-const CODE_EXTS = new Set(['.js', '.mjs', '.cjs', '.ts', '.tsx', '.jsx', '.py', '.ipynb', '.sh', '.zsh', '.bash', '.go', '.rs', '.java', '.kt', '.swift', '.c', '.cpp', '.h', '.hpp', '.html', '.css', '.scss', '.sql', '.vue', '.svelte', '.rb', '.php']);
+const WEB_EXTS = new Set(['.html', '.htm', '.xhtml', '.mhtml']);
+const CODE_EXTS = new Set(['.js', '.mjs', '.cjs', '.ts', '.tsx', '.jsx', '.py', '.ipynb', '.sh', '.zsh', '.bash', '.go', '.rs', '.java', '.kt', '.swift', '.c', '.cpp', '.h', '.hpp', '.css', '.scss', '.sql', '.vue', '.svelte', '.rb', '.php']);
 const CONFIG_EXTS = new Set(['.json', '.jsonc', '.yaml', '.yml', '.toml', '.ini', '.conf', '.env', '.xml']);
 const IMAGE_EXTS = new Set(['.png', '.jpg', '.jpeg', '.svg', '.gif', '.webp', '.bmp', '.tiff', '.heic', '.eps']);
 const AUDIO_EXTS = new Set(['.wav', '.mp3', '.flac', '.m4a', '.aac', '.ogg', '.opus', '.aiff']);
@@ -65,6 +66,7 @@ const RECOMMENDED_APPS = {
   office: ['Microsoft Word', 'Pages', 'WPS Office', 'TextEdit', 'Visual Studio Code'],
   data: ['Microsoft Excel', 'Numbers', 'WPS Office', 'Visual Studio Code', 'Cursor'],
   markdown: ['Typora', 'Obsidian', 'Visual Studio Code', 'Cursor', 'Antigravity', 'TextEdit'],
+  web: ['Google Chrome', 'Safari', 'Arc', 'Firefox', 'Microsoft Edge', 'Visual Studio Code', 'Cursor'],
   code: ['Visual Studio Code', 'Cursor', 'Antigravity', 'Zed', 'Sublime Text', 'Xcode', 'PyCharm', 'WebStorm', 'TextEdit'],
   config: ['Visual Studio Code', 'Cursor', 'Antigravity', 'Sublime Text', 'TextEdit'],
   image: ['Preview', 'Figma', 'Google Chrome', 'Safari', 'Photos'],
@@ -265,6 +267,7 @@ function detectFileType(filePath) {
   if (OFFICE_EXTS.has(ext)) return 'office';
   if (DATA_EXTS.has(ext)) return 'data';
   if (MARKDOWN_EXTS.has(ext)) return 'markdown';
+  if (WEB_EXTS.has(ext)) return 'web';
   if (CODE_EXTS.has(ext)) return 'code';
   if (CONFIG_EXTS.has(ext)) return 'config';
   if (IMAGE_EXTS.has(ext)) return 'image';
